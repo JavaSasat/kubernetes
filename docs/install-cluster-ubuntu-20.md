@@ -6,8 +6,8 @@ This documentation guides you in setting up a cluster with one master node and o
 ## Assumptions
 |Role|FQDN|IP|OS|RAM|CPU|
 |----|----|----|----|----|----|
-|Master|kmaster.example.com|172.16.16.100|Ubuntu 20.04|2G|2|
-|Worker|kworker.example.com|172.16.16.101|Ubuntu 20.04|1G|1|
+|Master|mbdapp|172.17.2.10|Ubuntu 20.04|16G|4|
+|Worker|mbdmaintenance|172.16.2.12|Ubuntu 20.04|16G|4|
 
 ## On both Kmaster and Kworker
 ##### Login as `root` user
@@ -38,7 +38,7 @@ sysctl --system
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
   add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   apt update
-  apt install -y docker-ce=5:19.03.10~3-0~ubuntu-focal containerd.io
+  apt install -y docker-ce containerd.io
 }
 ```
 ### Kubernetes Setup
@@ -51,7 +51,7 @@ sysctl --system
 ```
 ##### Install Kubernetes components
 ```
-apt update && apt install -y kubeadm=1.18.5-00 kubelet=1.18.5-00 kubectl=1.18.5-00
+apt update && apt install -y kubeadm kubelet kubectl
 ```
 ##### In case you are using LXC containers for Kubernetes nodes
 Hack required to provision K8s v1.15+ in LXC containers
@@ -84,7 +84,7 @@ EOF
 ##### Initialize Kubernetes Cluster
 Update the below command with the ip address of kmaster
 ```
-kubeadm init --apiserver-advertise-address=172.16.16.100 --pod-network-cidr=192.168.0.0/16  --ignore-preflight-errors=all
+kubeadm init --apiserver-advertise-address=172.17.2.10 --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
 ```
 ##### Deploy Calico network
 ```
@@ -117,5 +117,3 @@ kubectl get nodes
 ```
 kubectl get cs
 ```
-
-Have Fun!!
