@@ -64,6 +64,22 @@ Hack required to provision K8s v1.15+ in LXC containers
 }
 ```
 
+##### Using the systemd cgroup driver 
+```
+cat > /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+```
+
+##### Reboot
+
 ## On kmaster
 ##### Initialize Kubernetes Cluster
 Update the below command with the ip address of kmaster
